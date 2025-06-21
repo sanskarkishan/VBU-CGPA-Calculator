@@ -4,6 +4,9 @@ export const Btech = () => {
   const [sgpa, setSgpa] = useState(Array(8).fill(''));
   const [cgpa, setCgpa] = useState(null);
 
+  // Corresponding weights for each semester based on the formula
+  const weights = [24, 24, 22, 20, 21, 21, 20, 8];
+
   const handleChange = (index, value) => {
     const newSgpa = [...sgpa];
     newSgpa[index] = value;
@@ -11,9 +14,18 @@ export const Btech = () => {
   };
 
   const calculateCGPA = () => {
-    const total = sgpa.reduce((acc, curr) => acc + parseFloat(curr || 0), 0);
-    const validEntries = sgpa.filter(val => val !== '').length;
-    const result = validEntries > 0 ? (total / validEntries).toFixed(2) : 0;
+    let totalWeighted = 0;
+    let totalCredits = 0;
+
+    sgpa.forEach((val, idx) => {
+      if (val !== '') {
+        totalWeighted += parseFloat(val) * weights[idx];
+        totalCredits += weights[idx];
+      }
+    });
+        console.log(totalCredits, totalWeighted);
+        
+    const result = totalCredits > 0 ? (totalWeighted / totalCredits).toFixed(2) : 0;
     setCgpa(result);
   };
 
